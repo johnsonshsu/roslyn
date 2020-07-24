@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.ConvertTypeOfToNameOf
 {
     static void Main()
     {
-        var typeName1 = nameof(Test); var typeName2 = nameof(System.Int32); var typeName3 = nameof(System.String);
+        var typeName1 = nameof(Test); var typeName2 = nameof(int); var typeName3 = nameof(System.String);
     }
 }
 ";
@@ -92,9 +92,9 @@ class Test
     static void Main()
     {
         var typeName1 = nameof(Test);
-        var typeName2 = nameof(Int32);
+        var typeName2 = nameof(int);
         var typeName3 = nameof(String);
-        var typeName4 = nameof(Double);
+        var typeName4 = nameof(System.Double);
     }
 }
 ";
@@ -160,8 +160,8 @@ class Test2
     static void Main()
     {
         var typeName1 = nameof(Test1);
-        var typeName2 = nameof(Int32);
-        var typeName3 = nameof(String);
+        var typeName2 = nameof(int);
+        var typeName3 = nameof(System.String);
         var typeName4 = nameof(Double);
     }
 }
@@ -241,8 +241,8 @@ class Test2
     static void Main()
     {
         var typeName1 = nameof(Test1);
-        var typeName2 = nameof(Int32);
-        var typeName3 = nameof(String);
+        var typeName2 = nameof(int);
+        var typeName3 = nameof(System.String);
         var typeName4 = nameof(Double);
     }
 }
@@ -254,7 +254,7 @@ class Test3
 {
     static void Main()
     {
-        var typeName2 = nameof(System.Int32); var typeName3 = nameof(System.String);
+        var typeName2 = nameof(int); var typeName3 = nameof(System.String);
     }
 }
         </Document>

@@ -69,7 +69,7 @@ Imports System
 
 class Test
     sub Method()
-        dim typeName = [||]NameOf([String])
+        dim typeName = [||]NameOf(String)
     end sub
 end class
 "
@@ -95,7 +95,7 @@ Imports System
 
 class Test
     sub Method()
-        dim typeName = Foo([||]NameOf([String]))
+        dim typeName = Foo([||]NameOf(String))
     end sub
 
     sub Foo(ByVal typeName As String)

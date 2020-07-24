@@ -157,7 +157,7 @@ class Test
 {
     void Method()
     {
-            var typeName = [||]nameof(System.Int32);
+            var typeName = [||]nameof(int);
     }
 }
 ";
@@ -183,7 +183,7 @@ class Test
 {
     void Method()
     {
-            var typeName = [||]nameof(Int32);
+            var typeName = [||]nameof(int);
     }
 }
 ";
