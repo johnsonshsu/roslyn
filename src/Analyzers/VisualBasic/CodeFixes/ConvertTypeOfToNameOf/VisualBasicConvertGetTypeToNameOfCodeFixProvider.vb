@@ -4,7 +4,6 @@
 
 Imports System.Composition
 Imports System.Diagnostics.CodeAnalysis
-Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.CodeFixes
 Imports Microsoft.CodeAnalysis.ConvertTypeOfToNameOf
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
@@ -24,10 +23,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.ConvertTypeOfToNameOf
             Return visualbasic
         End Function
 
-        Protected Overrides Function GetSymbolType(semanticModel As SemanticModel, node As SyntaxNode) As ITypeSymbol
+        Protected Overrides Function GetTypeExpression(node As SyntaxNode) As SyntaxNode
             Dim expression = DirectCast(node, MemberAccessExpressionSyntax).Expression
-            Dim type = DirectCast(expression, GetTypeExpressionSyntax).Type
-            Return semanticModel.GetSymbolInfo(type).Symbol.GetSymbolType()
+            Return DirectCast(expression, GetTypeExpressionSyntax).Type
         End Function
     End Class
 End Namespace

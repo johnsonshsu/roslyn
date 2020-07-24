@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System;
 using System.Collections.Immutable;
 using System.Linq;
@@ -11,18 +13,16 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Editing;
-using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Shared.Extensions;
-using Microsoft.CodeAnalysis.Simplification;
 
 namespace Microsoft.CodeAnalysis.ConvertTypeOfToNameOf
 {
     internal abstract class AbstractConvertTypeOfToNameOfCodeFixProvider : SyntaxEditorBasedCodeFixProvider
     {
-        internal static string _codeFixTitle;
+        internal static string? CodeFixTitle;
         public AbstractConvertTypeOfToNameOfCodeFixProvider()
         {
-            _codeFixTitle = GetCodeFixTitle(AnalyzersResources.Convert_gettype_to_nameof, AnalyzersResources.Convert_typeof_to_nameof);
+            CodeFixTitle = GetCodeFixTitle(AnalyzersResources.Convert_gettype_to_nameof, AnalyzersResources.Convert_typeof_to_nameof);
         }
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
@@ -37,37 +37,37 @@ namespace Microsoft.CodeAnalysis.ConvertTypeOfToNameOf
             return Task.CompletedTask;
         }
 
-        protected override async Task FixAllAsync(
+        protected override Task FixAllAsync(
             Document document, ImmutableArray<Diagnostic> diagnostics,
             SyntaxEditor editor, CancellationToken cancellationToken)
         {
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             foreach (var diagnostic in diagnostics)
             {
                 var node = editor.OriginalRoot.FindNode(diagnostic.Location.SourceSpan, getInnermostNodeForTie: true);
-                ConvertTypeOfToNameOf(semanticModel, editor, node);
+                ConvertTypeOfToNameOf(editor, node);
             }
+
+            return Task.CompletedTask;
         }
 
         /// <Summary>
         ///  Method converts typeof(...).Name to nameof(...)
         /// </Summary>
-        public void ConvertTypeOfToNameOf(SemanticModel semanticModel, SyntaxEditor editor, SyntaxNode nodeToReplace)
+        public void ConvertTypeOfToNameOf(SyntaxEditor editor, SyntaxNode nodeToReplace)
         {
-            var symbolType = GetSymbolType(semanticModel, nodeToReplace);
-            var typeExpression = editor.Generator.TypeExpression(symbolType);
+            var typeExpression = GetTypeExpression(nodeToReplace);
             var nameOfSyntax = editor.Generator.NameOfExpression(typeExpression);
             editor.ReplaceNode(nodeToReplace, nameOfSyntax);
         }
 
-        protected abstract ITypeSymbol GetSymbolType(SemanticModel model, SyntaxNode node);
+        protected abstract SyntaxNode? GetTypeExpression(SyntaxNode node);
 
         protected abstract string GetCodeFixTitle(string visualbasic, string csharp);
 
         private class MyCodeAction : CustomCodeActions.DocumentChangeAction
         {
             public MyCodeAction(Func<CancellationToken, Task<Document>> createChangedDocument)
-                : base(_codeFixTitle, createChangedDocument, _codeFixTitle)
+                : base(CodeFixTitle, createChangedDocument, CodeFixTitle)
             {
             }
         }

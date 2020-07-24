@@ -9,7 +9,6 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.ConvertTypeOfToNameOf;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace Microsoft.CodeAnalysis.CSharp.ConvertTypeOfToNameOf
 {
@@ -27,11 +26,11 @@ namespace Microsoft.CodeAnalysis.CSharp.ConvertTypeOfToNameOf
             return csharp;
         }
 
-        protected override ITypeSymbol? GetSymbolType(SemanticModel model, SyntaxNode node)
+        protected override SyntaxNode? GetTypeExpression(SyntaxNode node)
         {
             if (node is MemberAccessExpressionSyntax { Expression: TypeOfExpressionSyntax typeOfExpression })
             {
-                return model.GetSymbolInfo(typeOfExpression.Type).Symbol.GetSymbolType();
+                return typeOfExpression.Type;
             }
             return null;
         }
